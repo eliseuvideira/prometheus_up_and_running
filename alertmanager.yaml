@@ -1,0 +1,8 @@
+route:
+  receiver: 'webhook'
+  group_by: ['alertname']
+
+receivers:
+  - name: 'webhook'
+    webhook_configs:
+      - url: 'https://webhook.site/d5a10021-6b3c-46c2-aeef-18c8ec86effe'
