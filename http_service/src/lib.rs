@@ -12,7 +12,7 @@ pub use metrics::*;
 pub use middlewares::*;
 pub use routes::*;
 
-pub fn create_router(metrics_handle: metrics_exporter_prometheus::PrometheusHandle) -> Router {
+pub fn create_router(metrics_context: MetricsContext) -> Router {
     let application_routes = Router::new()
         .route("/", get(routes::hello_world))
         .route("/health", get(routes::health_check))
@@ -24,7 +24,7 @@ pub fn create_router(metrics_handle: metrics_exporter_prometheus::PrometheusHand
 
     let metrics_routes = Router::new()
         .route("/metrics", get(metrics::serve_metrics))
-        .with_state(metrics_handle);
+        .with_state(metrics_context);
 
     Router::new()
         .merge(application_routes)

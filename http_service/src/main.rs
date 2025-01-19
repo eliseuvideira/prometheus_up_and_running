@@ -9,9 +9,9 @@ async fn main() -> Result<()> {
 
     config.setup_logging();
 
-    let metrics_handle = setup_metrics().context("Failed to setup metrics")?;
+    let metrics_context = setup_metrics().context("Failed to setup metrics")?;
 
-    let router = create_router(metrics_handle);
+    let router = create_router(metrics_context);
 
     let listener = TcpListener::bind(format!("0.0.0.0:{}", config.port))
         .await

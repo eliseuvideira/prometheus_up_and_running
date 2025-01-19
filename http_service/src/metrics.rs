@@ -7,10 +7,17 @@ use axum::{
 };
 use metrics::{describe_counter, describe_histogram};
 use metrics_exporter_prometheus::PrometheusHandle;
+use metrics_process::Collector;
 
 pub const METRICS_CONTENT_TYPE: &str = "text/plain; version=0.0.4";
 
-pub fn setup_metrics() -> Result<PrometheusHandle> {
+#[derive(Clone)]
+pub struct MetricsContext {
+    handle: PrometheusHandle,
+    collector: Collector,
+}
+
+pub fn setup_metrics() -> Result<MetricsContext> {
     describe_counter!(
         "http_request_total",
         metrics::Unit::Count,
@@ -32,15 +39,20 @@ pub fn setup_metrics() -> Result<PrometheusHandle> {
         "Total number of errors"
     );
 
-    metrics_exporter_prometheus::PrometheusBuilder::new()
-        .install_recorder()
-        .map_err(Into::into)
+    let collector = Collector::default();
+    collector.describe();
+
+    let handle = metrics_exporter_prometheus::PrometheusBuilder::new().install_recorder()?;
+
+    Ok(MetricsContext { handle, collector })
 }
 
-pub async fn serve_metrics(State(handle): State<PrometheusHandle>) -> impl IntoResponse {
+pub async fn serve_metrics(State(context): State<MetricsContext>) -> impl IntoResponse {
+    context.collector.collect();
+
     Response::builder()
         .status(StatusCode::OK)
         .header(CONTENT_TYPE, METRICS_CONTENT_TYPE)
-        .body(Body::from(handle.render()))
+        .body(Body::from(context.handle.render()))
         .unwrap()
 }
