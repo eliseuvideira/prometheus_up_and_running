@@ -44,3 +44,18 @@ services:
     ports:
       - 8080:8080
     restart: always
+
+  pushgateway:
+    image: prom/pushgateway:latest
+    ports:
+      - 9091:9091
+    restart: always
+
+  batch-service:
+    image: batch-service:latest
+    build:
+      context: batch_service
+      dockerfile: Dockerfile
+    environment:
+      - PUSH_GATEWAY_URL=http://pushgateway:9091
+    restart: always
