@@ -20,13 +20,18 @@ scrape_configs:
   - job_name: 'http-service'
     static_configs:
       - targets:
-          - http-service:8080
+          - http-service:8082
 
   - job_name: 'pushgateway'
     honor_labels: true
     static_configs:
       - targets:
           - pushgateway:9091
+
+  - job_name: 'cadvisor'
+    static_configs:
+      - targets:
+          - cadvisor:8081
 
 rule_files:
   - 'rules.yaml'
