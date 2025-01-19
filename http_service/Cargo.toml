@@ -1,0 +1,16 @@
+[package]
+name = "http_service"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+anyhow = { version = "1.0.95", features = ["backtrace"] }
+axum = "0.8.1"
+metrics = "0.24.1"
+metrics-exporter-prometheus = "0.16.1"
+serde = { version = "1.0.217", features = ["derive"] }
+serde_json = "1.0.135"
+tokio = { version = "1.43.0", features = ["full"] }
+tracing = "0.1.41"
+tracing-subscriber = { version = "0.3.19", features = ["json"] }
+uuid = { version = "1.12.0", features = ["v4", "v7"] }

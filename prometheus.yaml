@@ -17,6 +17,11 @@ scrape_configs:
       - targets:
           - node-exporter:9100
 
+  - job_name: 'http-service'
+    static_configs:
+      - targets:
+          - http-service:8080
+
 rule_files:
   - 'rules.yaml'
 
