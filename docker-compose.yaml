@@ -70,10 +70,13 @@ services:
 
   grafana:
     image: grafana/grafana:latest
+    command:
+      - --config=/etc/grafana/grafana.ini
     ports:
-      - 3000:3000
+      - 3001:3001
     volumes:
       - ./grafana:/var/lib/grafana
+      - ./grafana.ini:/etc/grafana/grafana.ini
     restart: always
 
   cadvisor:
